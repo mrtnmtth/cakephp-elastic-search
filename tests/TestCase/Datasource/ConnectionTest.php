@@ -108,6 +108,7 @@ class ConnectionTest extends TestCase
         $message = json_encode([
             'method' => 'GET',
             'path' => '_stats',
+            'query' => [],
             'data' => [],
         ], JSON_PRETTY_PRINT);
         $this->assertSame('debug: ' . $message, $logs[0]);
