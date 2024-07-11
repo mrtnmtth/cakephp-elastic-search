@@ -648,7 +648,7 @@ class Query implements IteratorAggregate, QueryInterface
     /**
      * Compile the Elasticsearch query.
      *
-     * @return string The Elasticsearch query.
+     * @return \Elastica\Query The Elasticsearch query.
      */
     public function compileQuery()
     {
