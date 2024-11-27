@@ -421,7 +421,7 @@ class DocumentContext implements ContextInterface
             $errors = $entity->getError(array_pop($parts));
         }
 
-        if (!$errors && $entityErrors && !is_array($entity)) {
+        if (!$errors && $entityErrors) {
             $errors = Hash::extract($entityErrors, $field) ?: [];
         }
 
