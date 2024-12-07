@@ -1,41 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="dev-master@">
+<files psalm-version="5.26.1@d747f6500b38ac4f7dfc5edbcae6e4b637d7add0">
   <file src="src/Datasource/Connection.php">
-    <InvalidReturnStatement occurrences="1">
-      <code>$this-&gt;_client-&gt;getConfig()</code>
+    <InvalidReturnStatement>
+      <code><![CDATA[$this->_client->getConfig()]]></code>
     </InvalidReturnStatement>
-    <InvalidReturnType occurrences="1">
-      <code>array</code>
+    <InvalidReturnType>
+      <code><![CDATA[array]]></code>
     </InvalidReturnType>
-    <LessSpecificImplementedReturnType occurrences="1">
-      <code>array</code>
+    <LessSpecificImplementedReturnType>
+      <code><![CDATA[array]]></code>
     </LessSpecificImplementedReturnType>
   </file>
   <file src="src/Index.php">
-    <NoInterfaceProperties occurrences="5">
-      <code>$entity-&gt;version</code>
-      <code>$entity-&gt;id</code>
-      <code>$entity-&gt;id</code>
-      <code>$entity-&gt;id</code>
-      <code>$entity-&gt;id</code>
+    <NoInterfaceProperties>
+      <code><![CDATA[$entity->id]]></code>
+      <code><![CDATA[$entity->id]]></code>
+      <code><![CDATA[$entity->id]]></code>
+      <code><![CDATA[$entity->id]]></code>
+      <code><![CDATA[$entity->version]]></code>
     </NoInterfaceProperties>
   </file>
   <file src="src/Marshaller.php">
-    <InvalidDocblock occurrences="1">
-      <code>public function one(array $data, array $options = []): Document</code>
+    <InvalidDocblock>
+      <code><![CDATA[public function one(array $data, array $options = []): Document]]></code>
     </InvalidDocblock>
-    <NoInterfaceProperties occurrences="1">
-      <code>$record-&gt;id</code>
+    <NoInterfaceProperties>
+      <code><![CDATA[$record->id]]></code>
     </NoInterfaceProperties>
   </file>
   <file src="src/Query.php">
-    <InvalidArgument occurrences="3">
-      <code>$query</code>
-      <code>$query</code>
-      <code>false</code>
-    </InvalidArgument>
-    <LessSpecificImplementedReturnType occurrences="1">
-      <code>\Traversable</code>
+    <LessSpecificImplementedReturnType>
+      <code><![CDATA[\Traversable]]></code>
     </LessSpecificImplementedReturnType>
+  </file>
+  <file src="src/View/Form/DocumentContext.php">
+    <InvalidReturnStatement>
+      <code><![CDATA[$entity]]></code>
+    </InvalidReturnStatement>
   </file>
 </files>

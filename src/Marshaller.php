@@ -59,7 +59,7 @@ class Marshaller
      *
      * @param array $data The data to hydrate.
      * @param array $options List of options
-     * @return \Cake\ElasticSearch\Document;
+     * @return \Cake\ElasticSearch\Document
      */
     public function one(array $data, array $options = []): Document
     {
