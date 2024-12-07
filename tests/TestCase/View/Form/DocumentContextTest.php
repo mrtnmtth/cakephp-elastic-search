@@ -537,13 +537,13 @@ class DocumentContextTest extends TestCase
                 ],
                 'en' => [
                     ['family_name' => 'ZZ', 'given_name' => 'AA'],
-                ]
-            ]
+                ],
+            ],
         ]);
         $row->setError('name', [
             'ja' => [
-                ['family_name' => ['_empty' => 'Invalid value']]
-            ]
+                ['family_name' => ['_empty' => 'Invalid value']],
+            ],
         ]);
 
         $articles = $this->setupIndex();

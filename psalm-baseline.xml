@@ -21,9 +21,6 @@
     </NoInterfaceProperties>
   </file>
   <file src="src/Marshaller.php">
-    <InvalidDocblock>
-      <code><![CDATA[public function one(array $data, array $options = []): Document]]></code>
-    </InvalidDocblock>
     <NoInterfaceProperties>
       <code><![CDATA[$record->id]]></code>
     </NoInterfaceProperties>
