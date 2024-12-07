@@ -473,10 +473,10 @@ class DocumentContextTest extends TestCase
         $expected = [ 'username' => [ 'Required' ] ];
         $this->assertEquals($expected, $context->error('user'));
 
-        $expected = [ 'Required' ];
+        $expected = ['Required'];
         $this->assertEquals($expected, $context->error('user.username'));
 
-        $expected = [ 'Required' ];
+        $expected = ['Required'];
         $this->assertEquals([], $context->error('comments.0'));
         $this->assertEquals($expected, $context->error('comments.0.comment'));
         $this->assertEquals($expected, $context->error('comments.2.comment'));
@@ -521,6 +521,43 @@ class DocumentContextTest extends TestCase
         $this->assertEquals([], $context->error('comments.1'));
         $this->assertEquals([], $context->error('comments.1.comment'));
         $this->assertEquals([], $context->error('comments.1.article_id'));
+    }
+
+    /**
+     * Test errors for structured fields.
+     *
+     * @return void
+     */
+    public function testErrorNestedFields()
+    {
+        $row = new Article([
+            'name' => [
+                'ja' => [
+                    ['family_name' => 'XX', 'given_name' => 'YY'],
+                ],
+                'en' => [
+                    ['family_name' => 'ZZ', 'given_name' => 'AA'],
+                ]
+            ]
+        ]);
+        $row->setError('name', [
+            'ja' => [
+                ['family_name' => ['_empty' => 'Invalid value']]
+            ]
+        ]);
+
+        $articles = $this->setupIndex();
+        $context = new DocumentContext(
+            $this->request,
+            [
+                'entity' => $row,
+                'table' => $articles,
+                'validator' => 'default',
+            ]
+        );
+        $this->assertEquals(['_empty' => 'Invalid value'], $context->error('name.ja.0.family_name'));
+        $this->assertEquals([], $context->error('name.derp.0.family_name'));
+        $this->assertEquals([], $context->error('name.derp.0.undefined'));
     }
 
     /**
