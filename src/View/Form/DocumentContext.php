@@ -417,11 +417,20 @@ class DocumentContext implements ContextInterface
             $entityErrors = $this->_context['entity']->getErrors();
         }
 
+        $tailField = array_pop($parts);
         if ($entity instanceof Document) {
-            $errors = $entity->getError(array_pop($parts));
+            $errors = $entity->getError($tailField);
         }
 
-        if (!$errors && $entityErrors && !is_array($entity)) {
+        // If errors couldn't be read from $entity and $entity
+        // is either not an array, or the tail field is not Document
+        // we want to extract errors from the root entity as we could
+        // have nested validators, or structured fields.
+        if (
+            !$errors &&
+            $entityErrors &&
+            (!is_array($entity) || !($entity[$tailField] instanceof Document))
+        ) {
             $errors = Hash::extract($entityErrors, $field) ?: [];
         }
 
