@@ -129,7 +129,7 @@ jobs:
       with:
         home: ${{ runner.temp }}/.phive
         binPath: ${{ github.workspace }}/tools/phive
-        trustGpgKeys: "CF1A108D0E7AE720,12CE0F1D262429A5"
+        trustGpgKeys: "CF1A108D0E7AE720,12CE0F1D262429A5,51C67305FFC2E5C0"
 
     - name: Run PHP CodeSniffer
       run: vendor/bin/phpcs --report=checkstyle src/ tests/ | cs2pr
