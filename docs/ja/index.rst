@@ -38,7 +38,7 @@ ElasticSearch プラグインをインストールするには、 ``composer`` �
 ====
 
 ElasticSearch プラグインは elasticsearch インデックスと作用することを簡単にし、
-`ORM <https://book.cakephp.org/3/ja/orm.html>`__ に似たインタフェースを提供します。まず最初に ``Type`` オブジェクトを
+`ORM <https://book.cakephp.org/3/ja/orm.html>`__ に似たインターフェイスを提供します。まず最初に ``Type`` オブジェクトを
 作成しなければいけません。 ``Type`` オブジェクトは elasticsearch 内では "Repository"
 もしくは Table のようなクラスです。 ::
 
