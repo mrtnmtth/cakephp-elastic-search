@@ -17,7 +17,7 @@ Breaking Changes
 
 
 Indexes
-================
+======
 
 IndexRegistry has been deprecated.
 
