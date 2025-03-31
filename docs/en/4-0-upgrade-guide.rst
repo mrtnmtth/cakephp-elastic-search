@@ -27,11 +27,8 @@ use Cake\ElasticSearch\IndexRegistry;
 $articles = IndexRegistry::get('Articles');
 ```
 
-Change to:
+Change to::
 
+    use Cake\Datasource\FactoryLocator;
 
-```php
-use Cake\Datasource\FactoryLocator;
-
-$articles = FactoryLocator::get('ElasticSearch')->get('Articles');
-```
+    $articles = FactoryLocator::get('ElasticSearch')->get('Articles');
