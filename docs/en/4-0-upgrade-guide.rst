@@ -21,13 +21,14 @@ Indexes
 
 IndexRegistry has been deprecated.
 
-```php
-use Cake\ElasticSearch\IndexRegistry;
+Old code example::
 
-$articles = IndexRegistry::get('Articles');
-```
+    use Cake\ElasticSearch\IndexRegistry;
 
-Change to::
+    $articles = IndexRegistry::get('Articles');
+
+
+New code example::
 
     use Cake\Datasource\FactoryLocator;
 
