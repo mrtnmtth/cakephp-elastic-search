@@ -14,3 +14,22 @@ Breaking Changes
 * ``Query::isEagerLoaded()``, and ``Query::eagerLoaded()`` were removed.
   Previously these methods were inherited from ``QueryTrait`` but served no
   purpose here.
+
+
+Indexes
+======
+
+IndexRegistry has been deprecated.
+
+Old code example::
+
+    use Cake\ElasticSearch\IndexRegistry;
+
+    $articles = IndexRegistry::get('Articles');
+
+
+New code example::
+
+    use Cake\Datasource\FactoryLocator;
+
+    $articles = FactoryLocator::get('ElasticSearch')->get('Articles');
