@@ -35,7 +35,7 @@ class EmbeddedDocumentTest extends TestCase
             [
             'name' => 'profiles',
             'connection' => ConnectionManager::get('test'),
-            ]
+            ],
         );
     }
 

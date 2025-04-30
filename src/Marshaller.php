@@ -83,7 +83,7 @@ class Marshaller
         string $class,
         array $data,
         array $options = [],
-        ?string $indexClass = null
+        ?string $indexClass = null,
     ): Document {
         $entity = new $class();
 
@@ -350,7 +350,7 @@ class Marshaller
         }
         if (!is_object($options['validate'])) {
             throw new RuntimeException(
-                sprintf('validate must be a boolean, a string or an object. Got %s.', gettype($options['validate']))
+                sprintf('validate must be a boolean, a string or an object. Got %s.', gettype($options['validate'])),
             );
         }
 

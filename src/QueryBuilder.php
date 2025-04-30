@@ -183,7 +183,7 @@ class QueryBuilder
     public function geoShape(
         string $field,
         array $geoPoints,
-        string $type = Elastica\Query\GeoShapeProvided::TYPE_ENVELOPE
+        string $type = Elastica\Query\GeoShapeProvided::TYPE_ENVELOPE,
     ): GeoShapeProvided {
         return new Elastica\Query\GeoShapeProvided($field, $geoPoints, $type);
     }
@@ -209,7 +209,7 @@ class QueryBuilder
         string $field,
         string $id,
         string $index = 'shapes',
-        string $path = 'shape'
+        string $path = 'shape',
     ): GeoShapePreIndexed {
         return new Elastica\Query\GeoShapePreIndexed($field, $id, $index, $path);
     }
