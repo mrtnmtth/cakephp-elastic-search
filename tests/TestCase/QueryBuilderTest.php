@@ -545,6 +545,24 @@ class QueryBuilderTest extends TestCase
             'term' => ['user.name' => 'jose'],
         ];
         $this->assertEquals($expected, $result->toArray());
+
+        $result = $builder->term('user.id', 1);
+        $expected = [
+            'term' => ['user.id' => 1],
+        ];
+        $this->assertEquals($expected, $result->toArray());
+
+        $result = $builder->term('user.rate', 4.5);
+        $expected = [
+            'term' => ['user.rate' => 4.5],
+        ];
+        $this->assertEquals($expected, $result->toArray());
+
+        $result = $builder->term('user.is_enabled', true);
+        $expected = [
+            'term' => ['user.is_enabled' => true],
+        ];
+        $this->assertEquals($expected, $result->toArray());
     }
 
     /**

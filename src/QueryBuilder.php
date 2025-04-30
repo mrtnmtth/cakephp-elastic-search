@@ -496,11 +496,11 @@ class QueryBuilder
      * }}}
      *
      * @param string $field The field to query by.
-     * @param string $value The term to find in field.
+     * @param string|float|int|bool $value The term to find in field.
      * @return \Elastica\Query\Term
      * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-term-query.html
      */
-    public function term(string $field, string|int|float $value): Term
+    public function term(string $field, string|float|int|bool $value): Term
     {
         return new Elastica\Query\Term([$field => $value]);
     }
