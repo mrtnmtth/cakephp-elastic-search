@@ -38,7 +38,12 @@ use Closure;
 use Elastica\Document as ElasticaDocument;
 use InvalidArgumentException;
 use Psr\SimpleCache\CacheInterface;
+use ReflectionException;
+use ReflectionFunction;
+use ReflectionMethod;
+use ReflectionNamedType;
 use RuntimeException;
+use function Cake\Core\deprecationWarning;
 use function Cake\Core\namespaceSplit;
 
 /**
@@ -349,7 +354,7 @@ class Index implements RepositoryInterface, EventListenerInterface, EventDispatc
     {
         $query = $this->query();
 
-        return $this->callFinder($type, $query, $args);
+        return $this->callFinder($type, $query, ...$args);
     }
 
     /**
@@ -370,23 +375,111 @@ class Index implements RepositoryInterface, EventListenerInterface, EventDispatc
      *
      * @param string $type name of the finder to be called
      * @param \Cake\ElasticSearch\Query $query The query object to apply the finder options to
-     * @param array $options List of options to pass to the finder
+     * @param mixed ...$args Arguments that match up to finder-specific parameters
      * @return \Cake\ElasticSearch\Query<\Cake\ElasticSearch\Document>
      * @throws \BadMethodCallException
      */
-    public function callFinder(string $type, Query $query, array $options = []): Query
+    public function callFinder(string $type, Query $query, mixed ...$args): Query
     {
-        $query->applyOptions($options);
-        $options = $query->getOptions();
         $finder = 'find' . ucfirst($type);
 
         if (method_exists($this, $finder)) {
-            return $this->{$finder}($query, $options);
+            return $this->invokeFinder($this->{$finder}(...), $query, $args);
         }
 
         throw new BadMethodCallException(
             sprintf('Unknown finder method "%s"', $type),
         );
+    }
+
+    /**
+     * Invokes a finder method with the provided arguments.
+     *
+     * @param \Closure $callable Callable.
+     * @param \Cake\ElasticSearch\Query $query The query object.
+     * @param array $args Arguments for the callable.
+     * @return \Cake\ElasticSearch\Query
+     * @throws \ReflectionException
+     */
+    private function invokeFinder(Closure $callable, Query $query, array $args): Query
+    {
+        $reflected = new ReflectionFunction($callable);
+        $params = $reflected->getParameters();
+        $secondParam = $params[1] ?? null;
+
+        $secondParamType = $secondParam?->getType();
+        $secondParamTypeName = $secondParamType instanceof ReflectionNamedType ? $secondParamType->getName() : null;
+
+        $secondParamIsOptions = (
+            count($params) === 2 &&
+            $secondParam?->name === 'options' &&
+            !$secondParam->isVariadic() &&
+            ($secondParamType === null || $secondParamTypeName === 'array')
+        );
+
+        if (($args === [] || isset($args[0])) && $secondParamIsOptions) {
+            // Backwards compatibility of CakePHP 4.x style finders
+            // with signature `findFoo(SelectQuery $query, array $options)`
+            // called as `find('foo')` or `find('foo', [..])`
+            if (isset($args[0])) {
+                deprecationWarning(
+                    '5.0.0',
+                    'Calling finders with options arrays is deprecated.'
+                    . ' Update your finder methods to used named arguments instead.',
+                );
+                $args = $args[0];
+            }
+            $query->applyOptions($args);
+
+            return $callable($query, $query->getOptions());
+        }
+
+        // Backwards compatibility for CakePHP 4.x style finders with signatures like
+        // `findFoo(SelectQuery $query, array $options)` called as
+        // `find('foo', key: $value)`.
+        if (!isset($args[0]) && $secondParamIsOptions) {
+            $query->applyOptions($args);
+
+            return $callable($query, $query->getOptions());
+        }
+
+        // Backwards compatibility for core finders like `findList()` called in CakePHP 4.x
+        // style with an array `find('list', ['valueField' => 'foo'])` instead of
+        // `find('list', valueField: 'foo')`
+        if (isset($args[0]) && is_array($args[0]) && $secondParamTypeName !== 'array') {
+            deprecationWarning(
+                '5.0.0',
+                "Calling `{$reflected->getName()}` finder with options array is deprecated."
+                . ' Use named arguments instead.',
+            );
+
+            $args = $args[0];
+        }
+
+        if ($args) {
+            $query->applyOptions($args);
+            // Fetch custom args without the query options.
+            $args = array_intersect_key($args, $query->getOptions());
+
+            unset($params[0]);
+            $lastParam = end($params);
+            reset($params);
+
+            if ($lastParam === false || !$lastParam->isVariadic()) {
+                $paramNames = [];
+                foreach ($params as $param) {
+                    $paramNames[] = $param->getName();
+                }
+
+                foreach ($args as $key => $value) {
+                    if (is_string($key) && !in_array($key, $paramNames, true)) {
+                        unset($args[$key]);
+                    }
+                }
+            }
+        }
+
+        return $callable($query, ...$args);
     }
 
     /**
